@@ -87,9 +87,6 @@ jobs:
             cd backend
             npm install
             npm audit fix --audit-level=critical --force
-
-
-
   analyze_frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -103,6 +100,7 @@ jobs:
             cd backend
             npm install
             npm audit fix --audit-level=critical --force
+
 
   deploy_backend_infrastructure:
     docker:
@@ -134,8 +132,8 @@ jobs:
           paths:
             - project/.circleci/outputs/backend_url.txt
             - project/.circleci/ansible/inventory.txt
-       - destroy_environment:
-           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy_environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
   deploy_frontend_infrastructure:
     docker:
@@ -149,8 +147,9 @@ jobs:
               --template-file .circleci/cloudformation/frontend_infrastructure.yml \
               --parameter-overrides ID="prod-${CIRCLE_WORKFLOW_ID:0:7}" \
               --stack-name udapeople-frontend-prod-${CIRCLE_WORKFLOW_ID:0:7}
-       - destroy_environment:
-           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy_environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+
   run_db_migrations_for_backend:
     docker:
       - image: circleci/node:13.8.0
@@ -176,8 +175,8 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/outputs/
-       - destroy_environment:
-           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy_environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
   deploy_backend_artifact:
     docker:
@@ -203,7 +202,7 @@ jobs:
             mkdir -p ~/project/.circleci/ansible/roles/deploy_backend/files/
             mv dist.zip ~/project/.circleci/ansible/roles/deploy_backend/files/
       - add_ssh_keys:
-          fingerprints: [ "	7d:68:75:e3:fb:f1:1d:5f:f1:b4:dd:9a:53:50:e5:04" ]
+          fingerprints: [ "7d:68:75:e3:fb:f1:1d:5f:f1:b4:dd:9a:53:50:e5:04" ]
       - run:
           name: Setup EC2 instance & copy compiled backend to the EC2 instance
           command: |
@@ -240,9 +239,9 @@ jobs:
           root: ~/
           paths:
             - project/frontend/dist
-       - destroy_environment:
-           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
-       - undo_migrations
+      - destroy_environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - undo_migrations
 
   deploy_frontend_artifact:
     docker:
@@ -261,9 +260,9 @@ jobs:
           command: |
             cd ~/project/frontend
             aws s3 cp dist s3://udapeople-prod-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-       - destroy_environment:
-           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
-       - undo_migrations
+      - destroy_environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - undo_migrations
 
   smoke_test_frontend:
     docker:
@@ -279,15 +278,15 @@ jobs:
       - run:
           name: Package frontend app
           command: |
-            if curl -s http://udapeople-prod-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-west-2.amazonaws.com/ | grep "Welcome"
+            if curl -s http://udapeople-prod-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.eu-central-1.amazonaws.com/ | grep "Welcome"
             then
             return 0
             else
             return 1
             fi
-       - destroy_environment:
-           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
-       - undo_migrations
+      - destroy_environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - undo_migrations
 
   smoke_test_backend:
     docker:
@@ -306,9 +305,9 @@ jobs:
             API_URL=`cat .circleci/outputs/backend_url.txt`
             echo $API_URL
             curl -s $API_URL/api/status
-       - destroy_environment:
-           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
-       - undo_migrations
+      - destroy_environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - undo_migrations
 
 
   deploy_cloudfront_infrastructure:
@@ -342,9 +341,9 @@ jobs:
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OLD_WORKFLOW_ID}"
             fi
 
-       - destroy_environment:
-           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
-       - undo_migrations
+      - destroy_environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - undo_migrations
 
 workflows:
   my_workflow:
