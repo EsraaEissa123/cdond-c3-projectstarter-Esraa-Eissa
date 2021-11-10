@@ -80,7 +80,9 @@ jobs:
     steps:
       - checkout
       - run: npm audit --audit-level=critical --prefix 
+      - checkout
       - run: npm audit fix --audit-level=critical --force
+      - checkout
       - run: npm audit --audit-level=critical
 
 
@@ -90,7 +92,9 @@ jobs:
     steps:
       - checkout
       - run: npm audit --audit-level=critical --prefix frontend
+      - checkout
       - run: npm audit fix --audit-level=critical --force
+      - checkout
       - run: npm audit --audit-level=critical
 
   deploy_backend_infrastructure:
