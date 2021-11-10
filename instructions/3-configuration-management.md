@@ -98,7 +98,7 @@ curl "http://${BACKEND_IP}:3030/api/status"
 ```
   - Check the front-end to make sure it includes a word or two that proves it is working properly.
 ```bash
-URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
+URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-west-2.amazonaws.com/#/employees"            
 if curl -s ${URL} | grep "Welcome"
 then
   return 1
