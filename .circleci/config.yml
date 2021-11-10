@@ -75,7 +75,12 @@ jobs:
       - run: npm run test --prefix frontend
 
   analyze_backend:
-   docker:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run: npm audit --audit-level=critical --prefix 
+    docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
@@ -87,8 +92,7 @@ jobs:
             cd backend
             npm install
             npm audit fix --audit-level=critical --force
-(edited)
- 
+
 
 
   analyze_frontend:
