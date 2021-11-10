@@ -283,7 +283,7 @@ jobs:
       - run:
           name: Package frontend app
           command: |
-            if curl -s http://udapeople-prod-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.us-west-2.amazonaws.com/ | grep "Welcome"
+            if curl -s http://udapeople-prod-${CIRCLE_WORKFLOW_ID:0:7}.s3-website..amazonaws.com/ | grep "Welcome"
             then
             return 0
             else
@@ -341,7 +341,7 @@ jobs:
 
             if printf '%s\n' "${STACKS[@]}" | grep -q "$OLD_WORKFLOW_ID"; then
               echo "Removing previous stack"
-              aws s3 rm "s3://udacity-${OLD_WORKFLOW_ID}" --recursive
+              aws s3 rm "s3://udapeople-${OLD_WORKFLOW_ID}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OLD_WORKFLOW_ID}"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OLD_WORKFLOW_ID}"
             fi
