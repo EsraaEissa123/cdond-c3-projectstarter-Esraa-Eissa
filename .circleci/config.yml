@@ -75,7 +75,6 @@ jobs:
       - run: npm run test --prefix frontend
 
   analyze_backend:
-    
     docker:
       - image: circleci/node:13.8.0
     steps:
@@ -96,7 +95,14 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: npm audit --audit-level=critical --prefix frontend
+      - restore_cache:
+          keys: [compile-frontend]
+      - run:
+          name: Scan Backend Vulnerabilities
+          command: |
+            cd backend
+            npm install
+            npm audit fix --audit-level=critical --force
 
   deploy_backend_infrastructure:
     docker:
