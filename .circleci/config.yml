@@ -161,7 +161,16 @@ jobs:
           name: Run DB migrations
           command: |
             cd backend
+            - checkout
+      - restore_cache:
+          keys: [compile-frontend]
+      - run:
+          name: Scan Backend Vulnerabilities
+          command: |
+            cd backend
             npm install
+            npm audit fix --audit-level=critical --force
+
             npm run migrations >> migration_output.txt
             cat migration_output.txt
       - run:
